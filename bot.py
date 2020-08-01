@@ -12,7 +12,7 @@ def start(message):
     button1 = types.KeyboardButton('Играть')
     button2 = types.KeyboardButton('Позже')
     markup.add(button1, button2)
-    msg_text = f"Привет, <strong>{message.from_user.first_name}</strong>! Поиграем? Сможешь угадать число, которое я загадал?"
+    msg_text = f"Привет, <strong>{message.from_user.first_name}</strong>! Поиграем? Сможете угадать число, которое я загадал? Нажмите 'Играть', чтобы начать игру."
     bot.send_message(message.chat.id, msg_text, parse_mode = 'html', reply_markup = markup)
 
 @bot.message_handler(content_types = ['text'])
@@ -31,7 +31,7 @@ def get_text_messages(message):
         global start_time
         start_time = time.time()
 
-        reply_msg_text = f"Круто! Я загадал число в диапазоне между {start_of_range} и {stop_of_range}. Посмотрим, за сколько попыток ты сможешь угадать?"
+        reply_msg_text = f"Круто! Я загадал число в диапазоне между {start_of_range} и {stop_of_range}. Посмотрим, за сколько попыток вы сможете угадать. Пришлите мне любое число в заданном диапазоне."
         bot.send_message(message.chat.id, reply_msg_text)
     elif msg_text.isnumeric():
         user_guess_number = int(msg_text)
@@ -87,7 +87,7 @@ def get_text_messages(message):
         bot.send_message(message.chat.id, notification_text, parse_mode = 'html')
         # Финал кода игры
     else:
-        reply_text = "Я не понимаю других команд, кроме 'Позже', 'Играть' и чисел. Введите 'Играть', если хотите начать игру или 'Позже', если хотите поиграть позже. А пока будет круто, если вы поделитесь ссылкой на меня с друзьями. Спасибо!"
+        reply_text = "Я не понимаю других команд, кроме 'Позже', 'Играть' и чисел. Введите 'Играть', если хотите начать игру или 'Позже', если хотите поиграть позже."
         bot.send_message(message.chat.id, reply_text)
 
 bot.polling(none_stop = True, interval = 0)
