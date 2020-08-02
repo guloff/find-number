@@ -1,0 +1,8 @@
+INFO: Platform: linux
+INFO: Version Info: v0.3.0
+DEBUG: Log Path: cp.log
+DEBUG: command: ['python3', '/media/rustam/DRIVE/Python/python_work/projects/tgbot/bot.py']
+DEBUG: file: None
+DEBUG: pause: True
+DEBUG: repl: python3
+DEBUG: args: ['/media/rustam/DRIVE/Python/python_work/projects/tgbot/bot.py']

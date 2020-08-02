@@ -1,3 +1,4 @@
+"""Version 1.1"""
 import telebot
 from telebot import types
 import random
@@ -33,60 +34,66 @@ def get_text_messages(message):
 
         reply_msg_text = f"Круто! Я загадал число в диапазоне между {start_of_range} и {stop_of_range}. Посмотрим, за сколько попыток вы сможете угадать. Пришлите мне любое число в заданном диапазоне."
         bot.send_message(message.chat.id, reply_msg_text)
-    elif msg_text.isnumeric():
-        user_guess_number = int(msg_text)
-        # Старт кода игры
-        n = True
-        if user_guess_number < number:
-            counter += 1
-            notification_text = f"<strong>Попытка №{counter}</strong>. Нет, маловато. Загаданное число больше {user_guess_number}."
-        elif user_guess_number > number:
-            counter += 1
-            notification_text = f"<strong>Попытка №{counter}</strong>. Нет, это больше загаданного. Попробуйте число меньше {user_guess_number}."
-        elif user_guess_number == number:
-            counter += 1
-            # Потрачено времени на игру
-            finish_time = time.time()
-            gametime = str(round(finish_time - start_time))
-            nums_0_14 = [0, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            nums_2_4 = [2, 3, 4]
-            # Склонение слова "секунда"
-            if int(gametime) in nums_0_14:
-                sec_word = 'секунд'
-            elif int(gametime[-1]) == 1:
-                sec_word = 'секунду'
-            elif int(gametime[-1]) in nums_2_4:
-                sec_word = 'секунды'
-            else:
-                sec_word = 'секунд'
+    try:
+        if msg_text.isnumeric():
+            user_guess_number = int(msg_text)
+            # Старт кода игры
+            # n = True
+            if user_guess_number < number:
+                counter += 1
+                notification_text = f"<strong>Попытка №{counter}</strong>. Нет, маловато. Загаданное число больше {user_guess_number}."
+            elif user_guess_number > number:
+                counter += 1
+                notification_text = f"<strong>Попытка №{counter}</strong>. Нет, это больше загаданного. Попробуйте число меньше {user_guess_number}."
+            elif user_guess_number == number:
+                counter += 1
+                # Потрачено времени на игру
+                finish_time = time.time()
+                gametime = str(round(finish_time - start_time))
+                nums_0_14 = [0, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                nums_2_4 = [2, 3, 4]
+                # Склонение слова "секунда"
+                if int(gametime) in nums_0_14:
+                    sec_word = 'секунд'
+                elif int(gametime[-1]) == 1:
+                    sec_word = 'секунду'
+                elif int(gametime[-1]) in nums_2_4:
+                    sec_word = 'секунды'
+                else:
+                    sec_word = 'секунд'
 
-            # Склонение слова "попытка"
-            counter = str(counter)
-            if int(counter) in nums_0_14:
-                counter_word = 'попыток'
-            elif int(counter[-1]) == 1:
-                counter_word = 'попытку'
-            elif int(counter[-1]) in nums_2_4:
-                counter_word = 'попытки'
-            else:
-                counter_word = 'попыток'
+                # Склонение слова "попытка"
+                counter = str(counter)
+                if int(counter) in nums_0_14:
+                    counter_word = 'попыток'
+                elif int(counter[-1]) == 1:
+                    counter_word = 'попытку'
+                elif int(counter[-1]) in nums_2_4:
+                    counter_word = 'попытки'
+                else:
+                    counter_word = 'попыток'
 
-            # Результат игры
-            results = {
-                'user_id': message.from_user.id,
-                'user_first_name': message.from_user.first_name,
-                'user_last_name': message.from_user.last_name,
-                'tries': counter,
-                'gametime': gametime,
-            }
-            # Запись результата в файле
-            with open('leaderboard.json', 'a') as f:
-                json.dump(results, f)
+                # Результат игры
+                results = {
+                    'user_id': message.from_user.id,
+                    'user_first_name': message.from_user.first_name,
+                    'user_last_name': message.from_user.last_name,
+                    'tries': counter,
+                    'gametime': gametime,
+                    'timestamp': start_time,
+                }
+                # Запись результата в файле
+                with open('leaderboard.json', 'a') as f:
+                    json.dump(results, f)
 
-            notification_text = f"Круто! Поздравляю <strong>{message.from_user.first_name}</strong>, вы нашли загаданное мною число за <strong>{counter} {counter_word}</strong>, потратив на игру <strong>{gametime} {sec_word}</strong>!"
-        bot.send_message(message.chat.id, notification_text, parse_mode = 'html')
-        # Финал кода игры
-    else:
+                notification_text = f"Круто! Поздравляю <strong>{message.from_user.first_name}</strong>, вы нашли загаданное мною число за <strong>{counter} {counter_word}</strong>, потратив на игру <strong>{gametime} {sec_word}</strong>!"
+            bot.send_message(message.chat.id, notification_text, parse_mode = 'html')
+            # Финал кода игры
+    except NameError:
+        notification_text = "Кажется, мы еще не начали играть. Пожалуйста, нажмите 'Играть'"
+        bot.send_message(message.chat.id, notification_text)
+
+    if msg_text != 'позже' and msg_text != 'играть' and not msg_text.isnumeric():
         reply_text = "Я не понимаю других команд, кроме 'Позже', 'Играть' и чисел. Введите 'Играть', если хотите начать игру или 'Позже', если хотите поиграть позже."
         bot.send_message(message.chat.id, reply_text)
 
