@@ -1,11 +1,20 @@
-"""Version 1.1"""
 import telebot
 from telebot import types
 import random
 import time
 import json
+"""Version 1.2"""
+# Добавлен расчет баллов по формуле баллы = ((100/"число попыток") + (100/"время на игру"))
+# Добавлено уведомление о количестве заработанных баллов
+"""Version 1.1"""
+# Произведен небольшой рефакторинг кода
+# Добавлен расчет времени, потраченного на игру
+"""Version 1.0"""
+# Бот умеет загадывать число и вычислять, правильно ли угадал число пользователь
+# Результаты запысываются в файл
 
-bot = telebot.TeleBot('1233473633:AAFLvRF0qb-xy5fFMz8SXuDeW-BYWK1_Lbc')
+TOKEN = '1233473633:AAFLvRF0qb-xy5fFMz8SXuDeW-BYWK1_Lbc'
+bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands = ['start'])
 def start(message):
@@ -73,20 +82,24 @@ def get_text_messages(message):
                 else:
                     counter_word = 'попыток'
 
+                # Заработанные баллы
+                points = round((100/int(counter)) + (100/int(gametime)), 1)
+
                 # Результат игры
                 results = {
                     'user_id': message.from_user.id,
                     'user_first_name': message.from_user.first_name,
                     'user_last_name': message.from_user.last_name,
-                    'tries': counter,
-                    'gametime': gametime,
-                    'timestamp': start_time,
+                    'tries': int(counter),
+                    'gametime': int(gametime),
+                    'starttime': start_time,
+                    'points': points,
                 }
                 # Запись результата в файле
                 with open('leaderboard.json', 'a') as f:
                     json.dump(results, f)
 
-                notification_text = f"Круто! Поздравляю <strong>{message.from_user.first_name}</strong>, вы нашли загаданное мною число за <strong>{counter} {counter_word}</strong>, потратив на игру <strong>{gametime} {sec_word}</strong>!"
+                notification_text = f"Круто! Поздравляю <strong>{message.from_user.first_name}</strong>, вы нашли загаданное мною число за <strong>{counter} {counter_word}</strong>, потратив на игру <strong>{gametime} {sec_word}</strong>! Количество заработанных баллов - <strong>{points}</strong>."
             bot.send_message(message.chat.id, notification_text, parse_mode = 'html')
             # Финал кода игры
     except NameError:
