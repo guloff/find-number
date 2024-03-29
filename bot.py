@@ -14,7 +14,7 @@ import json
 # Бот умеет загадывать число и вычислять, правильно ли угадал число пользователь
 # Результаты запысываются в файл
 
-TOKEN = '1233473633:AAFLvRF0qb-xy5fFMz8SXuDeW-BYWK1_Lbc'
+TOKEN = '-----------------------------'
 bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands = ['start'])
