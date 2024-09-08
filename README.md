@@ -1,40 +1,86 @@
-# Guess The Number Telegram Bot
+# Telegram Number Guessing Game Bot
 
-Welcome to the Guess The Number Telegram Bot, an interactive game where players attempt to guess a randomly selected number within a specified range. This bot is designed to provide users with a fun and engaging way to pass time, challenge their intuition, and improve their guessing skills.
+## Description
+
+This Python script is a Telegram bot that allows users to play a number guessing game. The bot randomly generates a number within a specified range, and the user tries to guess it. The bot tracks the number of attempts and the time taken for each game, then calculates a score based on the formula:  
+`score = (100 / number of attempts) + (100 / game time in seconds)`.  
+Results are stored in a JSON file, including the number of attempts, game time, and points.
 
 ## Features
 
-- **Interactive Gameplay**: Users interact with the bot through simple text commands to start playing, make guesses, or choose to play later.
-- **Dynamic Difficulty**: Each game session features a randomly generated number within a dynamic range, ensuring every game is unique.
-- **Real-Time Feedback**: Players receive immediate feedback on their guesses to help guide them towards the correct number.
-- **Performance Tracking**: The game calculates points based on the number of attempts and the time taken to guess the number, adding a competitive edge to the game.
-- **Session Persistence**: Game progress, such as the number of attempts and the elapsed time, is tracked seamlessly during the session.
+- **Random Number Guessing**: The bot generates a random number, and users try to guess it.
+- **Real-time Feedback**: The bot provides feedback after each attempt, telling users if the guess was too high or too low.
+- **Score Calculation**: The final score is calculated based on the number of attempts and the time spent.
+- **Leaderboard**: Game results are saved to a `leaderboard.json` file, recording user ID, number of attempts, game time, and score.
+- **Simple Commands**: Users can start the game with a simple "Играть" command and can delay playing with "Позже".
 
-## Version History
+## Requirements
 
-- **Version 1.2**: Introduced a scoring system based on the formula `points = ((100/"number of attempts") + (100/"game time"))`. Added notifications for earned points.
-- **Version 1.1**: Conducted minor code refactoring. Added tracking for the time spent on the game.
-- **Version 1.0**: Initial release. The bot can challenge players to guess a number and confirm if the guess is correct. Results are recorded in a file.
+- **Python 3.x**
+- **pyTelegramBotAPI**: A Python wrapper for the Telegram Bot API.
 
-## Getting Started
+### Install Dependencies
 
-To use this bot, you'll need to have a Telegram account. Start a conversation with the bot by searching for its Telegram username or clicking on a direct link (if provided).
+Install the required libraries using pip:
 
-### Commands
+```bash
+pip install pyTelegramBotAPI
+```
 
-- `/start`: Initiates the bot and presents the user with the option to play the game or defer it to later.
-- Text commands: The bot responds to "Играть" to start the game, "Позже" to defer the game, and numeric inputs for guesses.
+## Usage
 
-## Installation
+1. **Create a Telegram Bot**:
+   - Go to [BotFather](https://t.me/BotFather) in Telegram and create a new bot.
+   - Get the API token for your bot.
 
-This bot is built using the Python Telegram Bot API. To run your own instance of this bot:
+2. **Configure the Token**:
+   - In the script, replace the `TOKEN` variable with your actual Telegram bot API token.
 
-1. Clone this repository or download the source code.
-2. Ensure you have Python installed on your system.
-3. Install the required packages by running `pip install pyTelegramBotAPI`.
-4. Replace `TOKEN` in the script with your bot's unique API token obtained from BotFather.
-5. Run the script using `python script_name.py`.
+3. **Run the Bot**:
+   - Run the script using Python:
 
-## Contributing
+   ```bash
+   python bot.py
+   ```
 
-Feedback and contributions are highly appreciated! If you have any suggestions for improvements or have identified bugs, feel free to fork the repository, make your changes, and submit a pull request.
+4. **Interact with the Bot**:
+   - Send `/start` to the bot to initiate the interaction.
+   - Choose "Играть" to start the number guessing game.
+   - The bot will generate a random number, and you can start guessing by sending numbers.
+   - The bot will give feedback on whether your guess is too high or too low.
+   - Once you guess correctly, the bot will display the number of attempts, the time taken, and the score.
+
+### Example
+
+1. **Start the Game**:
+   ```text
+   Привет, <Name>! Поиграем? Сможете угадать число, которое я загадал? Нажмите 'Играть', чтобы начать игру.
+   ```
+2. **Receive Feedback**:
+   ```text
+   Попытка №1. Нет, маловато. Загаданное число больше 450.
+   ```
+3. **Game Results**:
+   ```text
+   Поздравляю! Вы угадали число за 5 попыток, потратив на игру 30 секунд. Количество заработанных баллов - 18.5.
+   ```
+
+## JSON Leaderboard Format
+
+Game results are saved in `leaderboard.json` with the following structure:
+
+```json
+{
+    "user_id": 123456789,
+    "user_first_name": "John",
+    "user_last_name": "Doe",
+    "tries": 5,
+    "gametime": 30,
+    "starttime": 1660000000.0,
+    "points": 18.5
+}
+```
+
+## License
+
+This project is licensed under the MIT License.
